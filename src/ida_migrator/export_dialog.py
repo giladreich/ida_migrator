@@ -64,7 +64,7 @@ class ExportDialog(MigratorDialog):
 
     def on_start_clicked(self):
         file, ext = os.path.splitext(idc.GetIdbPath())
-        selected_dir = QFileDialog.getExistingDirectory(self, "Select Path to Export File", os.path.dirname(file))
+        selected_dir = QFileDialog.getExistingDirectory(self, "Select Path to Export Files", os.path.dirname(file))
         if not selected_dir:
             return
 
@@ -86,7 +86,17 @@ class ExportDialog(MigratorDialog):
         with open(file_path_json, "w") as f:
             json.dump(payload, f, indent=4, sort_keys=True)
 
+        # NOTE(Gilad): Alternative Solution:
+        # Call idc.process_ui_action('ProduceHeader') to produce C header file and then
+        # on import idc.process_ui_action('LoadHeaderFile'). Only issue might be with parsing errors.
+        # Parsing .IDC files is more consistent with IDA API and therefore less error prone.
+        file_types = "{}_types_{}.idc".format(file_name, datetime)
+        file_path_types = os.path.join(selected_dir, file_types)
+        if not idc.GenerateFile(idc.OFILE_IDC, file_types, 0, idc.BADADDR, idc.GENFLG_IDCTYPE):
+            QMessageBox.error(self, "FAILED", "Failed to auto generate type information file (.idc)")
+        os.rename(file_types, file_path_types)
+
         QMessageBox.information(self, "SUCCESS",
-                                """Successfully dumped file under:\n{}
+                                """Successfully dumped files under:\n{}\n{}
                                 \nWhich can now be used to import into another idb instance."""
-                                .format(file_path_json))
+                                .format(file_path_json, file_path_types))

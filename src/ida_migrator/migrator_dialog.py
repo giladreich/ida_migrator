@@ -1,14 +1,20 @@
 import os
 
+import idc
+import idaapi
+import idautils
+
 from ida_migrator import UI_DIR
 
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 Ui_MigratorDialog, MigratorDialogBase = uic.loadUiType(
     os.path.join(UI_DIR, 'MigratorDialog.ui')
 )
+
+POINTER_FMT = "0x{:016X}" if idaapi.get_inf_structure().is_64bit() else "0x{:08X}"
 
 # Table columns
 col_CheckBox = 0
@@ -44,6 +50,19 @@ class MigratorDialog(MigratorDialogBase):
     # virtual
     def populate_function_names(self):
         print("[IDA Migrator]: BASE - populate_function_names")
+
+    def append_table_item(self, index, address, function):
+        # cbx = QCheckBox(self)
+        # cbx.setChecked(True)
+        # cbx.setStyleSheet("margin-left:10%;")
+        # self.tblFunctions.setCellWidget(index, col_CheckBox, cbx)
+        cbx = QTableWidgetItem()
+        cbx.setCheckState(Qt.Checked)
+        cbx.setTextAlignment(Qt.AlignCenter)
+        cbx.setFlags(Qt.NoItemFlags | Qt.ItemIsEnabled | Qt.ItemIsUserCheckable | Qt.ItemIsSelectable)
+        self.tblFunctions.setItem(index, col_CheckBox, cbx)
+        self.tblFunctions.setItem(index, col_Address, QTableWidgetItem(address))
+        self.tblFunctions.setItem(index, col_Name, QTableWidgetItem(function))
 
     # virtual
     def on_start_clicked(self):

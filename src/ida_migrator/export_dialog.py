@@ -11,6 +11,21 @@ class ExportDialog(MigratorDialog):
 
     def populate_function_names(self):
         print('[IDA Migrator]: Loading functions...')
+        total = 0
+        for seg in idautils.Segments():
+            total += len(list(idautils.Functions(seg, idc.SegEnd(seg))))
+
+        self.tblFunctions.setRowCount(total)
+        index = 0
+        for seg in idautils.Segments():
+            for func in idautils.Functions(seg, idc.SegEnd(seg)):
+                address = POINTER_FMT.format(func)
+                function = idc.GetFunctionName(func)
+                self.append_table_item(index, address, function)
+                index += 1
+        print('[IDA Migrator]: Finished loading functions.')
+
+
 
     def on_start_clicked(self):
         print('started export')

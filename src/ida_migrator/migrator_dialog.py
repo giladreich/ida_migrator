@@ -5,6 +5,7 @@ import time
 import idc
 import idaapi
 import idautils
+import ida_expr
 
 from ida_migrator import UI_DIR
 

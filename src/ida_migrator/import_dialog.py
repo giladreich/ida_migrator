@@ -45,4 +45,17 @@ class ImportDialog(MigratorDialog):
     def on_start_clicked(self):
         count = self.rename_functions()
         print("[IDA Migrator]: {} functions has been renamed.".format(count))
+
+        answer = QMessageBox.question(self, 'QUESTION',
+                """Would you like to import type information as well? (structs, enums)
+                \nYou'll need to provide the dumped IDC file.""",
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+
+        if answer == QMessageBox.Yes:
+            # idc.process_ui_action('Execute')
+            dir_path = os.path.dirname(idc.GetIdbPath())
+            file_path, _ = QFileDialog.getOpenFileName(self, "Select File to Import", dir_path, "IDC Script (*.idc)")
+            if file_path:
+                ida_expr.exec_idc_script(None, file_path.encode(), "main", None, 0)
+
         QMessageBox.information(self, "SUCCESS", "Successfully renamed {} functions.".format(count))

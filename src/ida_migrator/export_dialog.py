@@ -25,6 +25,25 @@ class ExportDialog(MigratorDialog):
                 index += 1
         print('[IDA Migrator]: Finished loading functions.')
 
+    def process_pe_info(self):
+        info = idaapi.get_inf_structure()
+
+        bits = 0xFF
+        if info.is_64bit():
+            bits = 64
+        elif info.is_32bit():
+            bits = 32
+
+        data = {
+            'exe': idc.GetInputFile(),
+            'arch': "x{}_bit".format(bits),
+            'file_type': idaapi.get_file_type_name(),
+            'base_addr': POINTER_FMT.format(idaapi.get_imagebase()),
+            'db_path': idaapi.get_input_file_path()
+        }
+
+        return data
+
     def process_functions(self):
         names = list()
         rowCount = self.tblFunctions.rowCount()
@@ -60,6 +79,7 @@ class ExportDialog(MigratorDialog):
         print("[IDA Migrator]: Exporting to {}".format(file_json))
         functions, count = self.process_functions()
         payload = {
+            'bpe_info': self.process_pe_info(),
             'functions_count': count,
             'functions': functions
         }

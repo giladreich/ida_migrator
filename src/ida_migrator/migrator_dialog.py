@@ -1,4 +1,6 @@
 import os
+import json
+import time
 
 import idc
 import idaapi
@@ -8,7 +10,9 @@ from ida_migrator import UI_DIR
 
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import (QMessageBox, QHeaderView,
+                             QTableWidget, QTableWidgetItem,
+                             QLineEdit, QFileDialog )
 
 Ui_MigratorDialog, MigratorDialogBase = uic.loadUiType(
     os.path.join(UI_DIR, 'MigratorDialog.ui')

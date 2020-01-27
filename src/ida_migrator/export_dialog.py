@@ -25,7 +25,48 @@ class ExportDialog(MigratorDialog):
                 index += 1
         print('[IDA Migrator]: Finished loading functions.')
 
+    def process_functions(self):
+        names = list()
+        rowCount = self.tblFunctions.rowCount()
+        count_added = 0
+        for row in range(rowCount):
+            cbx = self.tblFunctions.item(row, col_CheckBox)
+            if not cbx or cbx.checkState() != Qt.Checked:
+                continue
 
+            name = {
+                'address': self.tblFunctions.item(row, col_Address).text(),
+                'name': self.tblFunctions.item(row, col_Name).text()
+            }
+            count_added += 1
+            names.append(name)
+
+        return names, count_added
 
     def on_start_clicked(self):
-        print('started export')
+        file, ext = os.path.splitext(idc.GetIdbPath())
+        selected_dir = QFileDialog.getExistingDirectory(self, "Select Path to Export File", os.path.dirname(file))
+        if not selected_dir:
+            return
+
+        if os.name == 'nt':
+            selected_dir = selected_dir.replace('/', '\\')
+
+        file_name = os.path.basename(file)
+
+        datetime = time.strftime("%Y%m%d-%H%M%S")
+        file_json = "{}_symbols_{}.json".format(file_name, datetime)
+        file_path_json = os.path.join(selected_dir, file_json)
+        print("[IDA Migrator]: Exporting to {}".format(file_json))
+        functions, count = self.process_functions()
+        payload = {
+            'functions_count': count,
+            'functions': functions
+        }
+        with open(file_path_json, "w") as f:
+            json.dump(payload, f, indent=4, sort_keys=True)
+
+        QMessageBox.information(self, "SUCCESS",
+                                """Successfully dumped file under:\n{}
+                                \nWhich can now be used to import into another idb instance."""
+                                .format(file_path_json))

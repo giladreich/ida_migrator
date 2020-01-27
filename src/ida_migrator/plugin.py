@@ -15,6 +15,9 @@ class IdaMigratorPlugin(idaapi.plugin_t):
         idaapi.plugin_t.__init__(self)
 
     def init(self):
+        if not idaapi.init_hexrays_plugin():
+            return idaapi.PLUGIN_SKIP
+
         return idaapi.PLUGIN_KEEP
 
     def run(self, arg):

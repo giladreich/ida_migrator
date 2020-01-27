@@ -21,5 +21,28 @@ class ImportDialog(MigratorDialog):
                 index += 1
         print('[IDA Migrator]: Finished loading functions.')
 
+    def rename_functions(self):
+        row_count = self.tblFunctions.rowCount()
+        renamed_count = 0
+        for row in range(row_count):
+            cbx = self.tblFunctions.item(row, col_CheckBox)
+            if not cbx or cbx.checkState() != Qt.Checked:
+                continue
+
+            address_str = self.tblFunctions.item(row, col_Address).text()
+            address = int(address_str, 16)
+            name = self.tblFunctions.item(row, col_Name).text()
+            curr_name = idc.GetFunctionName(address)
+            if not name or not curr_name or name == curr_name:
+                continue
+
+            idaapi.set_name(address, name.encode(), idaapi.SN_NOWARN)
+            print("[IDA Migrator]: {} - Renamed {} to {}".format(address_str, curr_name, name))
+            renamed_count += 1
+
+        return renamed_count
+
     def on_start_clicked(self):
-        print('started import')
+        count = self.rename_functions()
+        print("[IDA Migrator]: {} functions has been renamed.".format(count))
+        QMessageBox.information(self, "SUCCESS", "Successfully renamed {} functions.".format(count))

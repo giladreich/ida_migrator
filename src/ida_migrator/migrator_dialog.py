@@ -20,6 +20,7 @@ class MigratorDialog(MigratorDialogBase):
 
     def __init__(self, *args, **kwargs):
         super(MigratorDialog, self).__init__(*args, **kwargs)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self._ui = Ui_MigratorDialog()
         self._ui.setupUi(self)
 

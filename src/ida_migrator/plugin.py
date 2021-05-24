@@ -19,7 +19,6 @@ class IdaMigratorPlugin(QObject, idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-D"
 
     def __init__(self, *args, **kwargs):
-        log_info("Successfully loaded plugin - v{}", VERSION)
         QObject.__init__(self, *args, **kwargs)
         idaapi.plugin_t.__init__(self)
         self._intro_dialog = None
@@ -28,6 +27,7 @@ class IdaMigratorPlugin(QObject, idaapi.plugin_t):
         if not idaapi.init_hexrays_plugin():
             return idaapi.PLUGIN_SKIP
 
+        log_info("Successfully loaded plugin - v{}", VERSION)
         return idaapi.PLUGIN_KEEP
 
     def run(self, arg):
@@ -35,4 +35,4 @@ class IdaMigratorPlugin(QObject, idaapi.plugin_t):
         self._intro_dialog.show()
 
     def term(self):
-        log_info("term")
+        pass

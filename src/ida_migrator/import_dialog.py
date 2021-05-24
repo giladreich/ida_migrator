@@ -32,7 +32,7 @@ class ImportDialog(MigratorDialog):
             address_str = self.tblFunctions.item(row, col_Address).text()
             address = int(address_str, 16)
             name = self.tblFunctions.item(row, col_Name).text()
-            curr_name = idc.GetFunctionName(address)
+            curr_name = idc.get_func_name(address)
             if not name or not curr_name or name == curr_name:
                 continue
 
@@ -53,7 +53,7 @@ class ImportDialog(MigratorDialog):
 
         if answer == QMessageBox.Yes:
             # idc.process_ui_action('Execute')
-            dir_path = os.path.dirname(idc.GetIdbPath())
+            dir_path = os.path.dirname(idc.get_idb_path())
             file_path, _ = QFileDialog.getOpenFileName(self, "Select File to Import", dir_path, "IDC Script (*.idc)")
             if file_path:
                 ida_expr.exec_idc_script(None, file_path.encode(), "main", None, 0)

@@ -13,14 +13,14 @@ class ExportDialog(MigratorDialog):
         print('[IDA Migrator]: Loading functions...')
         total = 0
         for seg in idautils.Segments():
-            total += len(list(idautils.Functions(seg, idc.SegEnd(seg))))
+            total += len(list(idautils.Functions(seg, idc.get_segm_end(seg))))
 
         self.tblFunctions.setRowCount(total)
         index = 0
         for seg in idautils.Segments():
-            for func in idautils.Functions(seg, idc.SegEnd(seg)):
+            for func in idautils.Functions(seg, idc.get_segm_end(seg)):
                 address = POINTER_FMT.format(func)
-                function = idc.GetFunctionName(func)
+                function = idc.get_func_name(func)
                 self.append_table_item(index, address, function)
                 index += 1
         print('[IDA Migrator]: Finished loading functions.')
@@ -35,7 +35,7 @@ class ExportDialog(MigratorDialog):
             bits = 32
 
         data = {
-            'exe': idc.GetInputFile(),
+            'exe': idc.get_root_filename(),
             'arch': "x{}_bit".format(bits),
             'file_type': idaapi.get_file_type_name(),
             'base_addr': POINTER_FMT.format(idaapi.get_imagebase()),
@@ -63,7 +63,7 @@ class ExportDialog(MigratorDialog):
         return names, count_added
 
     def on_start_clicked(self):
-        file, ext = os.path.splitext(idc.GetIdbPath())
+        file, ext = os.path.splitext(idc.get_idb_path())
         selected_dir = QFileDialog.getExistingDirectory(self, "Select Path to Export Files", os.path.dirname(file))
         if not selected_dir:
             return
@@ -89,11 +89,11 @@ class ExportDialog(MigratorDialog):
         # NOTE(Gilad): Alternative Solution:
         # Call idc.process_ui_action('ProduceHeader') to produce C header file and then
         # on import idc.process_ui_action('LoadHeaderFile'). Only issue might be with parsing errors.
-        # Parsing .IDC files is more consistent with IDA API and therefore less error prone.
+        # Parsing .IDC file is less error prone in this scenario.
         file_types = "{}_types_{}.idc".format(file_name, datetime)
         file_path_types = os.path.join(selected_dir, file_types)
-        if not idc.GenerateFile(idc.OFILE_IDC, file_types, 0, idc.BADADDR, idc.GENFLG_IDCTYPE):
-            QMessageBox.error(self, "FAILED", "Failed to auto generate type information file (.idc)")
+        if not idc.gen_file(idc.OFILE_IDC, file_types, 0, idc.BADADDR, idc.GENFLG_IDCTYPE):
+            QMessageBox.error(self, "FAILED", "Failed to generate type information file.")
         os.rename(file_types, file_path_types)
 
         QMessageBox.information(self, "SUCCESS",

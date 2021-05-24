@@ -35,7 +35,7 @@ class IntroDialog(IntroDialogBase):
         self._export_dialog.show()
 
     def on_import_clicked(self):
-        dir_path = os.path.dirname(idc.GetIdbPath())
+        dir_path = os.path.dirname(idc.get_idb_path())
         file_path, _ = QFileDialog.getOpenFileName(self, 'Select File to Import',
                                                    dir_path, 'Dump file (*.json)')
         if not file_path:

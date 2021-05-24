@@ -49,9 +49,9 @@ class ImportDialog(MigratorDialog):
         count = self.rename_functions()
         log_info("{} functions has been renamed.", count)
 
-        answer = QMessageBox.question(self, 'QUESTION',
+        answer = QMessageBox.question(self, 'Yes | No',
                 """Would you like to import type information as well? (structs, enums)
-                \nYou'll need to provide the dumped IDC file.""",
+                \nYou will need to provide the exported IDC file.""",
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
         if answer == QMessageBox.Yes:
@@ -61,4 +61,5 @@ class ImportDialog(MigratorDialog):
             if file_path:
                 ida_expr.exec_idc_script(None, str(file_path), "main", None, 0)
 
-        QMessageBox.information(self, "SUCCESS", "Successfully renamed {} functions.".format(count))
+        QMessageBox.information(self, "Successfully Imported",
+                                "Successfully renamed {} functions.".format(count))

@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>393</width>
-    <height>125</height>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>IDA Database Migrator</string>
+   <string>IDA Migrator</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -22,14 +22,18 @@
       </font>
      </property>
      <property name="text">
-      <string>With IDA Database Migrator you can migrate function names and types information from one IDA Database (idb) instance to another.
-
-What would you like to do?</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;IDA Migrator allows you to easily migrate function names, structures and enums from one database instance to another.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/giladreich/ida_migrator&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;github.com/giladreich/ida_migrator&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;What would you like to do?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
      </property>
      <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="openExternalLinks">
       <bool>true</bool>
      </property>
     </widget>
@@ -40,7 +44,8 @@ What would you like to do?</string>
       <widget class="QPushButton" name="btnExport">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -52,7 +57,8 @@ What would you like to do?</string>
       <widget class="QPushButton" name="btnImport">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">
@@ -64,7 +70,8 @@ What would you like to do?</string>
       <widget class="QPushButton" name="btnCancel">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="text">

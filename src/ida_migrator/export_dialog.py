@@ -97,7 +97,7 @@ class ExportDialog(MigratorDialog):
             QMessageBox.error(self, "FAILED", "Failed to generate type information file.")
         os.rename(file_types, file_path_types)
 
-        QMessageBox.information(self, "SUCCESS",
-                                """Successfully dumped files under:\n{}\n{}
-                                \nWhich can now be used to import into another idb instance."""
+        QMessageBox.information(self, "Successfully Exported",
+                                """Exported path:\n{}\n{}
+                                \nYou can now use the Importer and select these files to import in another database instance."""
                                 .format(file_path_json, file_path_types))

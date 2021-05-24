@@ -1,4 +1,5 @@
 from ida_migrator.migrator_dialog import *
+from ida_migrator.utility import log_info
 
 
 class ExportDialog(MigratorDialog):
@@ -10,7 +11,7 @@ class ExportDialog(MigratorDialog):
         self._ui.btnStart.setText("Start Export")
 
     def populate_function_names(self):
-        print('[IDA Migrator]: Loading functions...')
+        log_info('Loading functions...')
         total = 0
         for seg in idautils.Segments():
             total += len(list(idautils.Functions(seg, idc.get_segm_end(seg))))
@@ -23,7 +24,7 @@ class ExportDialog(MigratorDialog):
                 function = idc.get_func_name(func)
                 self.append_table_item(index, address, function)
                 index += 1
-        print('[IDA Migrator]: Finished loading functions.')
+        log_info('Finished loading functions.')
 
     def process_pe_info(self):
         info = idaapi.get_inf_structure()
@@ -76,7 +77,7 @@ class ExportDialog(MigratorDialog):
         datetime = time.strftime("%Y%m%d-%H%M%S")
         file_json = "{}_symbols_{}.json".format(file_name, datetime)
         file_path_json = os.path.join(selected_dir, file_json)
-        print("[IDA Migrator]: Exporting to {}".format(file_json))
+        log_info("Exporting to {}", file_json)
         functions, count = self.process_functions()
         payload = {
             'bpe_info': self.process_pe_info(),

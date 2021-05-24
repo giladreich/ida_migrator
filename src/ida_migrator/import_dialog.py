@@ -1,4 +1,5 @@
 from ida_migrator.migrator_dialog import *
+from ida_migrator.utility import log_info
 
 
 class ImportDialog(MigratorDialog):
@@ -11,7 +12,7 @@ class ImportDialog(MigratorDialog):
         self._ui.btnStart.setText("Start Import")
 
     def populate_function_names(self):
-        print('[IDA Migrator]: Loading functions...')
+        log_info('Loading functions...')
         with open(self.file_path, "r") as f:
             parsed_json = json.loads(f.read())
             self.tblFunctions.setRowCount(parsed_json['functions_count'])
@@ -19,7 +20,7 @@ class ImportDialog(MigratorDialog):
             for func in parsed_json['functions']:
                 self.append_table_item(index, func['address'], func['name'])
                 index += 1
-        print('[IDA Migrator]: Finished loading functions.')
+        log_info('Finished loading functions.')
 
     def rename_functions(self):
         row_count = self.tblFunctions.rowCount()
@@ -37,14 +38,14 @@ class ImportDialog(MigratorDialog):
                 continue
 
             idaapi.set_name(address, str(name), idaapi.SN_NOWARN)
-            print("[IDA Migrator]: {} - Renamed {} to {}".format(address_str, curr_name, name))
+            log_info("{} - Renamed {} to {}", address_str, curr_name, name)
             renamed_count += 1
 
         return renamed_count
 
     def on_start_clicked(self):
         count = self.rename_functions()
-        print("[IDA Migrator]: {} functions has been renamed.".format(count))
+        log_info("{} functions has been renamed.", count)
 
         answer = QMessageBox.question(self, 'QUESTION',
                 """Would you like to import type information as well? (structs, enums)

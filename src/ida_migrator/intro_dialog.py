@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFileDialog
 
 from ida_migrator import UI_DIR
+from ida_migrator.utility import log_info
 from ida_migrator.export_dialog import ExportDialog
 from ida_migrator.import_dialog import ImportDialog
 

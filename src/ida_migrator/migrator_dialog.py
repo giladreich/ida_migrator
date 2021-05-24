@@ -8,6 +8,7 @@ import idautils
 import ida_expr
 
 from ida_migrator import UI_DIR
+from ida_migrator.utility import log_info
 
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QTimer
@@ -62,7 +63,7 @@ class MigratorDialog(MigratorDialogBase):
 
     # virtual
     def populate_function_names(self):
-        print("[IDA Migrator]: BASE - populate_function_names")
+        log_info("BASE - populate_function_names")
 
     def append_table_item(self, index, address, function):
         # cbx = QCheckBox(self)
@@ -79,7 +80,7 @@ class MigratorDialog(MigratorDialogBase):
 
     # virtual
     def on_start_clicked(self):
-        print("[IDA Migrator]: BASE - on_start_clicked")
+        log_info("BASE - on_start_clicked")
 
     def on_search_textchanged(self, text):
         self.filter_text = text

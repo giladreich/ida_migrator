@@ -36,7 +36,7 @@ class ImportDialog(MigratorDialog):
             if not name or not curr_name or name == curr_name:
                 continue
 
-            idaapi.set_name(address, name.encode(), idaapi.SN_NOWARN)
+            idaapi.set_name(address, str(name), idaapi.SN_NOWARN)
             print("[IDA Migrator]: {} - Renamed {} to {}".format(address_str, curr_name, name))
             renamed_count += 1
 
@@ -56,6 +56,6 @@ class ImportDialog(MigratorDialog):
             dir_path = os.path.dirname(idc.get_idb_path())
             file_path, _ = QFileDialog.getOpenFileName(self, "Select File to Import", dir_path, "IDC Script (*.idc)")
             if file_path:
-                ida_expr.exec_idc_script(None, file_path.encode(), "main", None, 0)
+                ida_expr.exec_idc_script(None, str(file_path), "main", None, 0)
 
         QMessageBox.information(self, "SUCCESS", "Successfully renamed {} functions.".format(count))

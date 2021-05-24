@@ -37,9 +37,11 @@ class ImportDialog(MigratorDialog):
             if not name or not curr_name or name == curr_name:
                 continue
 
-            idaapi.set_name(address, str(name), idaapi.SN_NOWARN)
-            log_info("{} - Renamed {} to {}", address_str, curr_name, name)
-            renamed_count += 1
+            if idaapi.set_name(address, str(name), idaapi.SN_NOWARN):
+                log_info("{} - Renamed {} to {}", address_str, curr_name, name)
+                renamed_count += 1
+            else:
+                log_info("Failed renaming: {}. Disable SN_NOWARN to see why.", address_str)
 
         return renamed_count
 

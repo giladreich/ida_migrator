@@ -32,6 +32,7 @@ class IdaMigratorPlugin(QObject, idaapi.plugin_t):
 
     def run(self, arg):
         self._intro_dialog = IntroDialog(qApp.activeWindow())
+        self._intro_dialog.setWindowTitle("{} - v{}".format(PLUGIN_NAME, VERSION))
         self._intro_dialog.show()
 
     def term(self):

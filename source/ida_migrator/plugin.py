@@ -24,9 +24,6 @@ class IdaMigratorPlugin(QObject, idaapi.plugin_t):
         self._intro_dialog = None
 
     def init(self):
-        if not idaapi.init_hexrays_plugin():
-            return idaapi.PLUGIN_SKIP
-
         log_info("Successfully loaded plugin - v{}", VERSION)
         return idaapi.PLUGIN_KEEP
 
